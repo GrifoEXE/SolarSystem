@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LinearAlgebra</title>
+</head>
+<body>
+    <script src="matrix.js"></script>
+    <script src="vector.js"></script>
+    <script src="linalg.js"></script>
+    <script src="transformation.js"></script>
+    <input type = "file" name="file" id = "file">
+    
+    <script type="text/javascript">
+            var cnt = 1
+
+
+        document.getElementById('file').onchange = function()
+        {
+
+            let file = this.files[0];
+
+            let reader = new FileReader();
+        reader.onload = function(progressEvent)
+        {
+            
+            let lines = this.result.split(/\r\n|\n/)//Separa as as linhas por espaço
+            
+            for(let i =0 ; i<=4;i++)//Executar programa 5 vezes
+            {
+                let start = window.performance.now()
+                for(let i =0;i<lines.length-1;i++)
+                {
+                    let line = lines[i]
+                    if(!line.startsWith("%"))
+                    {
+
+                        if(cnt == 1)
+                        {
+                            let spc = line.split(" ") //Espaço
+                            var matrix = new Matrix(Number(spc[0]),Number(spc[1])) //obj Matrix
+                            cnt++
+
+                        }
+
+                        else
+                        {
+                            let spc = line.split(" ")
+                            matrix.set(Number(spc[0]),Number(spc[1]),Number(spc[2]))
+                        }
+
+                        if(i==lines.length-2)
+                        {
+                        let la = new LinearAlgebra()//Instanciar linalg
+
+                        let end = window.performance.now()//Tempo de execução
+
+                        console.log(la.solve(matrix))
+
+                        console.log(`Execution time: ${end - start} ms`)
+
+
+
+                        }
+                    }
+                }
+            }
+        }
+
+            reader.readAsText(file);
+        };
+    </script>
+</body>
+</html>
